@@ -28,10 +28,10 @@ public class ResourceLoaderTest {
     @SpringBootApplication
     public static class TestApplication {
 
+        @Setter
         @Component
         public static class SampleResource implements ResourceLoaderAware {
 
-            @Setter
             private ResourceLoader resourceLoader;
 
             public String getText() throws IOException {
