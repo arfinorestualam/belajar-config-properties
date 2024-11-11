@@ -5,7 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.convert.ApplicationConversionService;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.core.convert.ConversionService;
+import pzn.config.converter.StringToDateConverter;
 import pzn.config.properties.ApplicationProperties;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +23,9 @@ public class ConfigurationPropertiesTest {
 
     @Autowired
     private ApplicationProperties applicationProperties;
+
+    @Autowired
+    private ConversionService conversionService;
 
     @Test
     void testConfigurationProperties() {
@@ -57,6 +65,8 @@ public class ConfigurationPropertiesTest {
 
     @Test
     void testDurationProperties() {
+        //untuk mengecek apakah sudah ada conversion service yang menhandle convert dari yang kita inginkan
+        Assertions.assertTrue(conversionService.canConvert(String.class, Duration.class));
         Assertions.assertEquals(Duration.ofSeconds(10), applicationProperties.getTimeout());
     }
 
@@ -66,14 +76,23 @@ public class ConfigurationPropertiesTest {
         var dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         //akan error karena belum di registrasi ke Conversion Service
         Assertions.assertEquals("2024-11-11", dateFormat.format(expireDate));
+        //sesudah ditambahkan di TestApplication, sudah bisa di test.
     }
 
     @SpringBootApplication
     @EnableConfigurationProperties({
             ApplicationProperties.class
     })
+    //mendaftarkan ke conversion service secara manual
+    @Import(StringToDateConverter.class)
     public static class TestApplication {
 
+        @Bean
+        public ConversionService conversionService(StringToDateConverter stringToDateConverter) {
+            ApplicationConversionService conversionService = new ApplicationConversionService();
+            conversionService.addConverter(stringToDateConverter);
+            return conversionService;
+        }
 
     }
 }
