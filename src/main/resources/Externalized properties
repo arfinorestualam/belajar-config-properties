@@ -1,0 +1,5 @@
+1. Buat file jar dengan mvn compile package
+2. Jalankan file di terminal, jangan lupa copas nama file jar yang berada di target
+3. jalankan dengan : java -jar target/(nama file jar)
+4. jika ingin memakai configurasi di luar yang sudah ada (application.properties)
+    jalankan sebagi berikut : java -jar target/(nama file jar) --spring.config.location=(nama lokasi dan nama properties)
