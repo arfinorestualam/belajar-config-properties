@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import pzn.config.properties.ApplicationProperties;
 
+import java.util.Arrays;
+
 @SpringBootTest(classes = ConfigurationPropertiesTest.TestApplication.class)
 public class ConfigurationPropertiesTest {
 
@@ -27,6 +29,27 @@ public class ConfigurationPropertiesTest {
         Assertions.assertEquals("secret",applicationProperties.getDatabase().getPassword());
         Assertions.assertEquals("learn", applicationProperties.getDatabase().getDatabase());
         Assertions.assertEquals("jdbc:contoh",applicationProperties.getDatabase().getUrl());
+    }
+
+    @Test
+    void testCollectionProperties() {
+        Assertions.assertEquals(Arrays.asList("products", "customers","categories"), applicationProperties.getDatabase().getWhitelistTable());
+        Assertions.assertEquals(100, applicationProperties.getDatabase().getMaxTableSize().get("products"));
+        Assertions.assertEquals(100, applicationProperties.getDatabase().getMaxTableSize().get("customers"));
+        Assertions.assertEquals(100, applicationProperties.getDatabase().getMaxTableSize().get("categories"));
+    }
+
+    @Test
+    void testEmbeddedCollectionProperties() {
+        Assertions.assertEquals("default", applicationProperties.getDefaultRoles().getFirst().getId());
+        Assertions.assertEquals("Default Role", applicationProperties.getDefaultRoles().getFirst().getName());
+        Assertions.assertEquals("guest", applicationProperties.getDefaultRoles().get(1).getId());
+        Assertions.assertEquals("Guest Role", applicationProperties.getDefaultRoles().get(1).getName());
+
+        Assertions.assertEquals("admin", applicationProperties.getRoles().get("admin").getId());
+        Assertions.assertEquals("Admin Role", applicationProperties.getRoles().get("admin").getName());
+        Assertions.assertEquals("finance", applicationProperties.getRoles().get("finance").getId());
+        Assertions.assertEquals("Finance Role", applicationProperties.getRoles().get("finance").getName());
     }
 
     @SpringBootApplication
