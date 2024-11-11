@@ -61,3 +61,7 @@ public class ProfileTest {
         }
     }
 }
+//Bisa juga menggunakan --spring.profiles.active=(langsung sebut dengan pisah koma, misal : production,test)
+//Jalankan di terminal dengan cara buat dulu package sampai jadi file jar
+//Lalu masukkan comman java -jar target/(nama jar) --spring.profiles.active=(langsung sebut dengan pisah koma, misal : production,test)
+//ini cara mengubah active profile dari application properties
