@@ -8,7 +8,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import pzn.config.properties.ApplicationProperties;
 
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Arrays;
+import java.util.Date;
 
 @SpringBootTest(classes = ConfigurationPropertiesTest.TestApplication.class)
 public class ConfigurationPropertiesTest {
@@ -50,6 +53,19 @@ public class ConfigurationPropertiesTest {
         Assertions.assertEquals("Admin Role", applicationProperties.getRoles().get("admin").getName());
         Assertions.assertEquals("finance", applicationProperties.getRoles().get("finance").getId());
         Assertions.assertEquals("Finance Role", applicationProperties.getRoles().get("finance").getName());
+    }
+
+    @Test
+    void testDurationProperties() {
+        Assertions.assertEquals(Duration.ofSeconds(10), applicationProperties.getTimeout());
+    }
+
+    @Test
+    void testCustomConverter() {
+        Date expireDate = applicationProperties.getExpiredDate();
+        var dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //akan error karena belum di registrasi ke Conversion Service
+        Assertions.assertEquals("2024-11-11", dateFormat.format(expireDate));
     }
 
     @SpringBootApplication
