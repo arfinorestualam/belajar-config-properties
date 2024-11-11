@@ -3,3 +3,6 @@
 3. jalankan dengan : java -jar target/(nama file jar)
 4. jika ingin memakai configurasi di luar yang sudah ada (application.properties)
     jalankan sebagi berikut : java -jar target/(nama file jar) --spring.config.location=(nama lokasi dan nama properties)
+
+- Khusus yaml
+1. Hampir sama, tinggal masukkan nama lokasi dan nama yaml setelah --spring.config.location=
